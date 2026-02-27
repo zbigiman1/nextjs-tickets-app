@@ -1,17 +1,17 @@
-import { Status } from "@/types";
+import { Status } from '@/types'
 
 export default function StatusTag({
   status,
-  statusLabels,
+  statusLabels
 }: {
-  status: Status;
-  statusLabels: Record<string, string>;
+  status: Status
+  statusLabels: Record<string, string>
 }) {
   const statusColors: Record<string, string> = {
-    new: "bg-sky-500",
-    in_progress: "bg-orange-500",
-    closed: "bg-green-500",
-  };
+    new: 'bg-sky-500',
+    in_progress: 'bg-orange-500',
+    closed: 'bg-green-500'
+  }
 
   return (
     <span
@@ -19,5 +19,5 @@ export default function StatusTag({
     >
       {statusLabels[status]}
     </span>
-  );
+  )
 }

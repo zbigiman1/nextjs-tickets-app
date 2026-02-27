@@ -1,9 +1,9 @@
-"use client"
+'use client'
 
-import { locales } from "@/i18n/config"
-import { usePathname, useRouter } from "@/i18n/navigation"
-import { useLocale } from "next-intl"
-import { useTransition } from "react"
+import { locales } from '@/i18n/config'
+import { usePathname, useRouter } from '@/i18n/navigation'
+import { useLocale } from 'next-intl'
+import { useTransition } from 'react'
 
 export default function LanguageSwitcher() {
   const locale = useLocale()
@@ -18,8 +18,8 @@ export default function LanguageSwitcher() {
   }
 
   return (
-    <div style={{ display: "flex", gap: 8 }}>
-      {locales.map((l) => (
+    <div style={{ display: 'flex', gap: 8 }}>
+      {locales.map(l => (
         <button
           key={l}
           onClick={() => switchLocale(l)}

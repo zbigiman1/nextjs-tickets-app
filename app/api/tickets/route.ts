@@ -3,8 +3,7 @@ import type { Ticket } from '@/types'
 import { NextResponse } from 'next/server'
 
 // simulate delay
-const delay = (ms: number) =>
-  new Promise(resolve => setTimeout(resolve, ms))
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
