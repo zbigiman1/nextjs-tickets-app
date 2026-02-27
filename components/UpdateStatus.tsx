@@ -1,8 +1,8 @@
 'use client'
 
+import { useUpdateStatus } from '@/lib/useUpdateStatus'
 import type { Status } from '@/types/Ticket'
 import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 type Props = {
@@ -12,38 +12,11 @@ type Props = {
 
 export default function UpdateStatus({ id, initial }: Props) {
   const [status, setStatus] = useState<Status>(initial)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const router = useRouter()
+  const { loading, error, submit } = useUpdateStatus()
   const t = useTranslations()
 
-  async function submit() {
-    setLoading(true)
-    setError(null)
-    try {
-      const res = await fetch(`/api/tickets/${encodeURIComponent(id)}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status })
-      })
-      if (!res.ok) {
-        const json = await res.json().catch(() => null)
-        throw new Error(json?.error || 'Failed to update status')
-      }
-      router.refresh()
-    } catch (err: unknown) {
-      function extractMessage(e: unknown) {
-        if (typeof e === 'string') return e
-        if (e && typeof e === 'object' && 'message' in e) {
-          const m = (e as { message?: unknown }).message
-          if (typeof m === 'string') return m
-        }
-        return String(e)
-      }
-      setError(extractMessage(err))
-    } finally {
-      setLoading(false)
-    }
+  const handleSubmit = async () => {
+    await submit(id, status as string)
   }
 
   return (
@@ -61,7 +34,7 @@ export default function UpdateStatus({ id, initial }: Props) {
         ))}
       </select>
       <button
-        onClick={submit}
+        onClick={handleSubmit}
         disabled={loading}
         className="bg-sky-600 text-white px-3 py-1 rounded cursor-pointer disabled:opacity-50 hover:bg-sky-700 disabled:hover:bg-sky-600"
       >

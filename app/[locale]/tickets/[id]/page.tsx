@@ -1,19 +1,11 @@
 import FormatedDate from '@/components/FormatedDate'
 import StatusTag from '@/components/StatusTag'
 import UpdateStatus from '@/components/UpdateStatus'
-import type { Status, Ticket } from '@/types/Ticket'
+import { fetchTicketById } from '@/lib/fetchTicketById'
+import type { Status } from '@/types/Ticket'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-
-async function fetchTicketById(id: string) {
-  const base = process.env.NEXT_PUBLIC_BASE_URL ?? `http://localhost:${process.env.PORT ?? 3000}`
-  const url = new URL(`/api/tickets/${encodeURIComponent(id)}`, base)
-  const res = await fetch(url.toString(), { cache: 'no-store' })
-  if (res.status === 404) return null
-  if (!res.ok) throw new Error('Failed to fetch ticket')
-  return res.json() as Promise<Ticket>
-}
 
 export default async function TicketPage({
   params
