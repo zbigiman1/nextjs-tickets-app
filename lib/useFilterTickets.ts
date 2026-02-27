@@ -9,8 +9,6 @@ export function useFilterTickets(initialTickets: Ticket[], status: string) {
 
   useEffect(() => {
     if (status === 'all') {
-      // restore server-provided tickets; defer to avoid synchronous setState in effect
-  // ensure loading is reset when restoring (defer to avoid sync setState in effect)
       const loadingTimer = setTimeout(() => setLoading(false), 0)
       const restoreTimer = setTimeout(() => setTickets(initialTickets), 0)
       return () => {
