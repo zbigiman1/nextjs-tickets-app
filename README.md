@@ -2,6 +2,7 @@
 
 - Next.js 16
 - next-intl localization
+- vitest unit tests
 - fake api
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).

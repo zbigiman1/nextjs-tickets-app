@@ -2,9 +2,10 @@
 
 import { Loader } from '@/components/Loader'
 import StatusTag from '@/components/StatusTag'
+import { useFilterTickets } from '@/lib/useFilterTickets'
 import type { Ticket } from '@/types/Ticket'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function TicketsTable({
   initialTickets,
@@ -26,38 +27,8 @@ export default function TicketsTable({
   priorityLabels: Record<string, string>
 }) {
   const router = useRouter()
-  const [tickets, setTickets] = useState<Ticket[]>(initialTickets)
   const [status, setStatus] = useState<string>('all')
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    if (status === 'all') {
-      // restore server-provided tickets; defer to avoid synchronous setState in effect
-      const restoreTimer = setTimeout(() => setTickets(initialTickets), 0)
-      return () => clearTimeout(restoreTimer)
-    }
-
-    let mounted = true
-    const timer = setTimeout(() => setLoading(true), 0)
-
-    fetch(`/api/tickets?status=${encodeURIComponent(status)}`)
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch')
-        return res.json()
-      })
-      .then((data: Ticket[]) => {
-        if (mounted) setTickets(data)
-      })
-      .catch(() => {
-        if (mounted) setTickets([])
-      })
-      .finally(() => mounted && setLoading(false))
-
-    return () => {
-      mounted = false
-      clearTimeout(timer)
-    }
-  }, [status, initialTickets])
+  const { tickets, loading } = useFilterTickets(initialTickets, status)
 
   if (loading) {
     return <Loader />
